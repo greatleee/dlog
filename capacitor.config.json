@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "Dlog",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}

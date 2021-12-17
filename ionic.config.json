@@ -1,0 +1,8 @@
+{
+  "name": "Dlog",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react",
+  "id": "45bb19c1"
+}
