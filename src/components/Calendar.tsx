@@ -4,9 +4,15 @@ import useCalendar from '@veccu/react-calendar';
 import { IonContent } from '@ionic/react';
 import styles from './Calendar.module.css';
 import sojuBasicImage from '../assets/images/soju_basic.svg'
+import { useRecordDispatch } from '../providers/RecordProvider';
 
 const Calendar = () => {
-  const { headers, body } = useCalendar()
+  const { headers, body } = useCalendar();
+  const dispatch = useRecordDispatch();
+
+  const onClick = (date: Date) => {
+    dispatch({ type: 'TOGGLE_CREATE_MODAL', show: true, date: date });
+  };
 
   return (
     <IonContent>
@@ -30,7 +36,7 @@ const Calendar = () => {
                       <div>{ date }</div>
                     </div>
 
-                    <figure>
+                    <figure onClick={onClick.bind(null, value)}>
                       <img src={sojuBasicImage} alt=""/>
                     </figure>
                   </div> }
