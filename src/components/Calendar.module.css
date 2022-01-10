@@ -1,14 +1,23 @@
 .table {
+  margin-top: 15px;
   width: 100%;
-  height: 80%;
+  height: 90%;
   text-align: center;
+}
+
+thead {
+  font-size: 13px;
+  line-height: 13px;
+  color: var(--ion-color-medium-shade);
 }
 
 .item {
   height: 100%;
   padding: 2px;
   display: grid;
-  grid-template-rows: 30% 70%;
+  grid-template-rows: 23% 82%;
+
+  font-size: 14px;
 }
 
 .item figure {
@@ -20,4 +29,17 @@
 .item figure img {
   height: 100%;
   object-fit: cover;
+}
+
+.item .today {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.item .today > div {
+  color: white;
+  background-color: #56DDA2;
+  border-radius: 10px;
+  width: 60%;
 }
