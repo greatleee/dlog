@@ -1,0 +1,7 @@
+.mask {
+  width: 100%;
+  height: 100%;
+  -webkit-mask: url("../../assets/images/soju_basic.svg") no-repeat center/cover;
+  mask: url("../../assets//images//soju_basic.svg") no-repeat center/cover;
+  background-color: var(--ion-color-step-750);
+}
