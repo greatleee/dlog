@@ -1,4 +1,10 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/react';
 import Calendar from '../components/Calendar';
 
 const Tab1: React.FC = () => {
@@ -11,7 +17,7 @@ const Tab1: React.FC = () => {
       </IonHeader>
 
       <IonContent>
-        <Calendar />
+        <Calendar/>
       </IonContent>
     </IonPage>
   );
