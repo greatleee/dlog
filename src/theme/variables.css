@@ -234,3 +234,7 @@ http://ionicframework.com/docs/theming/ */
     --ion-card-background: #1e1e1e;
   }
 }
+
+.ion-color-dlog {
+  --ion-color-base: #56DDA2;
+}
