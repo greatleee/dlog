@@ -4,10 +4,19 @@ import useCalendar from '@veccu/react-calendar';
 import styles from './Calendar.module.css';
 import sojuBasicImage from '../assets/images/soju_basic.svg'
 import { useRecordDispatch } from '../providers/RecordProvider';
+import { useEffect } from 'react';
 
-const Calendar = () => {
-  const { headers, body } = useCalendar();
+type CalendarProps = {
+  date?: Date;
+};
+
+const Calendar: React.FC<CalendarProps> = ({ date }) => {
+  const { headers, body, navigation } = useCalendar();
   const dispatch = useRecordDispatch();
+
+  useEffect(() => {
+    if (date) navigation.setDate(date);
+  }, [date]);
 
   const onClick = (date: Date) => {
     dispatch({ type: 'TOGGLE_CREATE_MODAL', show: true, date: date });
@@ -46,5 +55,9 @@ const Calendar = () => {
     </table>
   )
 }
+
+Calendar.defaultProps = {
+  date: new Date(),
+};
 
 export default Calendar
