@@ -19,7 +19,6 @@ const MainTabs: React.FC = () => {
     const today = new Date();
     today.setDate(today.getDate() - 1);
     const yesterday = today;
-    console.debug(yesterday);
 
     dispatch({
       type: 'TOGGLE_CREATE_MODAL',
