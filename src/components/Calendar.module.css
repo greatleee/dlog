@@ -6,18 +6,18 @@
 }
 
 thead {
-  font-size: 13px;
-  line-height: 13px;
+  font-size: 11px;
   color: var(--ion-color-medium-shade);
 }
 
 .item {
   height: 100%;
-  padding: 2px;
+  /* padding: 2px; */
   display: grid;
-  grid-template-rows: 23% 82%;
+  grid-template-rows: 18% 75%;
 
-  font-size: 14px;
+  font-size: 12px;
+  line-height: 12px;
 }
 
 .item figure {
@@ -27,6 +27,7 @@ thead {
 }
 
 .item figure img {
+  width: 100%;
   height: 100%;
   object-fit: cover;
 }
@@ -38,8 +39,9 @@ thead {
 }
 
 .item .today > div {
+  padding: 2px 0;
   color: white;
   background-color: #56DDA2;
   border-radius: 10px;
-  width: 60%;
+  width: 45%;
 }
