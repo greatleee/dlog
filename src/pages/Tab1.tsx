@@ -1,12 +1,8 @@
 import {
-  IonButton,
-  IonButtons,
   IonChip,
   IonContent,
-  IonDatetime,
   IonHeader,
   IonIcon,
-  IonModal,
   IonPage,
   IonTitle,
   IonToolbar,
@@ -14,57 +10,65 @@ import {
 } from '@ionic/react';
 import { caretDownOutline } from 'ionicons/icons';
 import { useEffect, useRef, useState } from 'react';
-import styles from './Tab1.module.css'
+import MonthPickerBottomsheet from '../components/bottomsheets/MonthPickerBottomsheet';
 import Calendar from '../components/Calendar';
 
+
 const Tab1: React.FC = () => {
-  const datetimeValue = useRef(new Date().toISOString());
+  const selectedDatetime = useRef(new Date().toISOString());
+  const confirmedDatetime = useRef(new Date().toISOString());
 
   const [yearMonth, setYearMonth] = useState('');
+  const [showBottomsheet, setShowBottomsheet] = useState(false);
 
-  const [toast, dismissToast] = useIonToast();
+  const [showToast, dismissToast] = useIonToast();
 
   useEffect(() => {
     confirm();
   }, []);
 
   const onChangeYearMonth = (value: string) => {
-    datetimeValue.current = value;
+    selectedDatetime.current = value;
   };
 
   const confirm = () => {
-    const date = new Date(datetimeValue.current);
-    if (date.getMonth() > new Date().getMonth()) {
-      toast({ message: '미래의 음주는 기록할 수 없오!', color: 'danger', duration: 2000 });
+    const date = new Date(selectedDatetime.current);
+    const now = new Date();
+    setShowBottomsheet(false);
+    if (date.getFullYear() >= now.getFullYear() && date.getMonth() > now.getMonth()) {
+      showToast({ message: '미래의 음주는 기록할 수 없오!', color: 'danger', duration: 2000 });
       return;
     }
+    confirmedDatetime.current = selectedDatetime.current;
     setYearMonth(`${date.getFullYear()}년 ${date.getMonth() + 1}월`)
-  }
+  };
 
   return (
-    <IonPage>
-      <IonHeader collapse="fade">
-        <IonToolbar>
-          <IonTitle>
-            <IonChip id="picker">
-              { yearMonth }
-              <IonIcon icon={caretDownOutline}/>
-            </IonChip>
-          </IonTitle>
-        </IonToolbar>
-      </IonHeader>
+    <>
+      <IonPage>
+        <IonHeader collapse="fade">
+          <IonToolbar>
+            <IonTitle>
+              <IonChip onClick={() => setShowBottomsheet(true)}>
+                { yearMonth }
+                <IonIcon icon={caretDownOutline}/>
+              </IonChip>
+            </IonTitle>
+          </IonToolbar>
+        </IonHeader>
 
-      <IonContent>
-        <Calendar date={new Date(datetimeValue.current)}/>
-      </IonContent>
-      <IonModal className={ styles.modal } trigger="picker" onWillDismiss={confirm}>
-        <IonDatetime
-          value={datetimeValue.current}
-          presentation="month-year"
-          onIonChange={e => onChangeYearMonth(e.detail.value!)}
-        />
-      </IonModal>
-    </IonPage>
+        <IonContent>
+          <Calendar date={new Date(confirmedDatetime.current)}/>
+        </IonContent>
+      </IonPage>
+
+      <MonthPickerBottomsheet
+        isOpen={showBottomsheet}
+        datetime={confirmedDatetime.current}
+        changeYearMonth={onChangeYearMonth}
+        dismiss={confirm}
+      />
+    </>
   );
 };
 

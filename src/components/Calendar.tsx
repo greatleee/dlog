@@ -2,7 +2,7 @@ import { format } from 'date-fns'
 import locale from 'date-fns/locale/ko'
 import useCalendar from '@veccu/react-calendar';
 import styles from './Calendar.module.css';
-import sojuBasicImage from '../assets/images/soju_basic.svg'
+import Mask from './calendar/Mask';
 import { useRecordDispatch } from '../providers/RecordProvider';
 import { useEffect } from 'react';
 
@@ -43,9 +43,9 @@ const Calendar: React.FC<CalendarProps> = ({ date }) => {
                     <div>{ date }</div>
                   </div>
 
-                  <figure onClick={onClick.bind(null, value)}>
-                    <img src={sojuBasicImage} alt=""/>
-                  </figure>
+                  <div onClick={onClick.bind(null, value)}>
+                    <Mask/>
+                  </div>
                 </div> }
               </td>
             ))}
