@@ -19,6 +19,7 @@ import DrinkList from './lists/DrinkList';
 import SojuEmotionList from './lists/SojuEmotionList'; 
 import SojuStatusList from './lists/SojuStatusList';
 import { useRecordDispatch, useRecordState } from '../providers/RecordProvider';
+import SelectedImageList from './lists/SelectedImageList';
 
 
 const CreateRecordModal = () => {
@@ -81,6 +82,7 @@ const CreateRecordModal = () => {
 
         <div>
           <h1>사진 있오?</h1>
+          <SelectedImageList/>
         </div>
 
         <div>
