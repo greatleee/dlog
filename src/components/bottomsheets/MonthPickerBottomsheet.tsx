@@ -6,24 +6,28 @@ import { IonButton, IonContent, IonDatetime, IonModal } from '@ionic/react';
 type Props = {
   isOpen: boolean;
   datetime: string;
-  changeYearMonth: Function;
-  dismiss: Function;
+  onChangeYearMonth: Function;
+  onDismiss: Function;
 };
 
-
-const MonthPickerBottomsheet: React.FC<Props> = ({isOpen, datetime, changeYearMonth, dismiss}) => {
+const MonthPickerBottomsheet: React.FC<Props> = ({
+  isOpen,
+  datetime,
+  onChangeYearMonth,
+  onDismiss,
+}) => {
   return (
-    <IonModal css={modalStyle} isOpen={isOpen} onWillDismiss={() => dismiss()}>
+    <IonModal css={modalStyle} isOpen={isOpen} onWillDismiss={() => onDismiss()}>
       <IonContent>
         <div css={header}>
-          <IonButton color="dlog" onClick={() => dismiss()}>완료</IonButton>
+          <IonButton color="dlog" onClick={() => onDismiss()}>완료</IonButton>
         </div>
 
         <IonDatetime
           css={datetimeStyle}
           value={datetime}
           presentation="month-year"
-          onIonChange={e => changeYearMonth(e.detail.value)}
+          onIonChange={e => onChangeYearMonth(e.detail.value)}
         />
       </IonContent>
     </IonModal>

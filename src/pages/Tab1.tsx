@@ -12,6 +12,7 @@ import { caretDownOutline } from 'ionicons/icons';
 import { useEffect, useRef, useState } from 'react';
 import MonthPickerBottomsheet from '../components/bottomsheets/MonthPickerBottomsheet';
 import Calendar from '../components/Calendar';
+import { checkFuture } from '../utils/date';
 
 
 const Tab1: React.FC = () => {
@@ -27,20 +28,22 @@ const Tab1: React.FC = () => {
     confirm();
   }, []);
 
-  const onChangeYearMonth = (value: string) => {
+  const changeYearMonth = (value: string) => {
     selectedDatetime.current = value;
   };
 
   const confirm = () => {
-    const date = new Date(selectedDatetime.current);
-    const now = new Date();
-    setShowBottomsheet(false);
-    if (date.getFullYear() >= now.getFullYear() && date.getMonth() > now.getMonth()) {
+    const selectedDate = new Date(selectedDatetime.current);
+
+    if (checkFuture(selectedDate)) {
       showToast({ message: '미래의 음주는 기록할 수 없오!', color: 'danger', duration: 2000 });
-      return;
+    } else {
+      confirmedDatetime.current = selectedDatetime.current;
+      const confirmedDate = new Date(confirmedDatetime.current);
+      setYearMonth(`${confirmedDate.getFullYear()}년 ${confirmedDate.getMonth() + 1}월`);
     }
-    confirmedDatetime.current = selectedDatetime.current;
-    setYearMonth(`${date.getFullYear()}년 ${date.getMonth() + 1}월`)
+
+    setShowBottomsheet(false);
   };
 
   return (
@@ -65,8 +68,8 @@ const Tab1: React.FC = () => {
       <MonthPickerBottomsheet
         isOpen={showBottomsheet}
         datetime={confirmedDatetime.current}
-        changeYearMonth={onChangeYearMonth}
-        dismiss={confirm}
+        onChangeYearMonth={changeYearMonth}
+        onDismiss={confirm}
       />
     </>
   );
