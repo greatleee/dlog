@@ -66,8 +66,8 @@ const Calendar: React.FC<CalendarProps> = ({ date }) => {
             {days.map(({ key, date, value, isCurrentDate, isCurrentMonth }) => (
               <td key={ key }>
                 { isCurrentMonth && <div className={ styles.item }>
-                  <div className={ isCurrentDate ? styles.today : '' }>
-                    <div>{ date }</div>
+                  <div className={styles.day}>
+                    <div className={ isCurrentDate ? styles.today : '' }>{ date }</div>
                   </div>
 
                   <div onClick={clickDateImage.bind(null, value, records?.[date])}>

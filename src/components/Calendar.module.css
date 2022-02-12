@@ -1,7 +1,6 @@
 .table {
-  margin-top: 15px;
   width: 100%;
-  height: 90%;
+  height: 97%;
   text-align: center;
 }
 
@@ -10,11 +9,15 @@ thead {
   color: var(--ion-color-medium-shade);
 }
 
+thead th {
+  padding-bottom: 5px;
+}
+
 .item {
   height: 100%;
   /* padding: 2px; */
   display: grid;
-  grid-template-rows: 18% 75%;
+  grid-template-rows: 15% 83%;
 
   font-size: 12px;
   line-height: 12px;
@@ -32,16 +35,16 @@ thead {
   object-fit: cover;
 }
 
-.item .today {
+.item .day {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.item .today > div {
-  padding: 2px 0;
+.item .today {
+  padding: 1px 0;
   color: white;
   background-color: #56DDA2;
   border-radius: 10px;
-  width: 45%;
+  width: 40%;
 }
