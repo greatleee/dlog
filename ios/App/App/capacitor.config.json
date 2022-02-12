@@ -2,5 +2,8 @@
 	"appId": "io.dlog",
 	"appName": "Dlog",
 	"webDir": "build",
-	"bundledWebRuntime": false
+	"bundledWebRuntime": false,
+	"server": {
+		"url": "http://192.168.0.8:8100"
+	}
 }

@@ -15,16 +15,28 @@ import {
   IonToolbar
 } from '@ionic/react';
 import { closeOutline } from 'ionicons/icons';
+import { useState } from 'react';
 import DrinkList from './lists/DrinkList';
-import SojuEmotionList from './lists/SojuEmotionList'; 
-import SojuStatusList from './lists/SojuStatusList';
-import { useRecordDispatch, useRecordState } from '../providers/RecordProvider';
 import SelectedImageList from './lists/SelectedImageList';
+import SojuEmotionList, { SojuEmotionEnum } from './lists/SojuEmotionList'; 
+import SojuStatusList, { SojuStatusEnum } from './lists/SojuStatusList';
+import { createRecord } from './modals/storage';
+import { useRecordDispatch, useRecordState } from '../providers/RecordProvider';
 
 
-const CreateRecordModal = () => {
+export type Record = {
+  emotion: SojuEmotionEnum|undefined,
+  status: SojuStatusEnum|undefined,
+};
+
+const CreateRecordModal: React.FC = () => {
   const state = useRecordState();
   const dispatch = useRecordDispatch();
+
+  const [record, setRecord] = useState<Record>({
+    emotion: undefined,
+    status: undefined,
+  });
 
   const formatDate = (date: Date) => {
     const now = new Date();
@@ -40,12 +52,39 @@ const CreateRecordModal = () => {
     return format(date, 'M월 d일 E요일', { locale }) + postfix;
   };
 
-  const onClick = () => {
-    dispatch({ type: 'TOGGLE_CREATE_MODAL', show: false, date: new Date() });
+  const close = () => {
+    dispatch({
+      type: 'TOGGLE_CREATE_MODAL',
+      show: false,
+      date: new Date(),
+      record: undefined,
+    });
   };
 
-  const selectEmotionList = (value: string) => {
+  const selectEmotion = async (value: SojuEmotionEnum) => {
+    await setRecord({
+      ...record,
+      emotion: value,
+    });
+  };
 
+  const selectStatus = async (value: SojuStatusEnum) => {
+    await setRecord({
+      ...record,
+      status: value,
+    });
+  };
+
+  const submit = () => {
+    const yyyyMM = format(state.createDate, 'yyyyMM', { locale });
+    const d = format(state.createDate, 'd', { locale });
+    createRecord(yyyyMM, d, record);
+    dispatch({
+      type: 'TOGGLE_CREATE_MODAL',
+      show: false,
+      date: new Date(),
+      record: undefined,
+    });
   };
 
   return (
@@ -54,7 +93,7 @@ const CreateRecordModal = () => {
       <IonHeader collapse="fade">
         <IonToolbar>
           <IonButtons>
-            <IonButton onClick={onClick}>
+            <IonButton onClick={close}>
               <IonIcon icon={closeOutline}/>
             </IonButton>
           </IonButtons>
@@ -67,12 +106,12 @@ const CreateRecordModal = () => {
       <IonContent css={ styles.content } fullscreen={true}>
         <div>
           <h1>이 날 기분이 어땠오?</h1>
-          <SojuEmotionList onSelect={selectEmotionList}/>
+          <SojuEmotionList value={state.record?.emotion} onSelect={selectEmotion}/>
         </div>
 
         <div>
           <h1>마시고 나서 상태가 어땠오?</h1>
-          <SojuStatusList onSelect={selectEmotionList}/>
+          <SojuStatusList value={state.record?.status} onSelect={selectStatus}/>
         </div>
 
         <div>
@@ -84,15 +123,13 @@ const CreateRecordModal = () => {
           <h1>사진 있오?</h1>
           <SelectedImageList/>
         </div>
-
-        <div>
-          <h1>더 하고 싶은 말 있오?</h1>
-        </div>
       </IonContent>
 
       <IonFooter collapse="fade">
         <IonToolbar>
-          <IonButton color="dlog" size="large" expand="block">작성완료</IonButton>
+          <IonButton color="dlog" size="large" expand="block" onClick={submit}>
+            작성완료
+          </IonButton>
         </IonToolbar>
       </IonFooter>
       </IonApp>

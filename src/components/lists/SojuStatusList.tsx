@@ -1,20 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { IonImg } from '@ionic/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import basic from '../../assets/images/soju/basic.svg';
 import vomit from '../../assets/images/soju/vomit.svg';
 import blackout from '../../assets/images/soju/blackout.svg';
 
 
-enum SojuStatusEnum {
+export enum SojuStatusEnum {
   BASIC = 'BASIC',
   VOMIT = 'VOMIT',
   BLACKOUT = 'BLACKOUT',
 };
 
 
-const SojuStatusList = ({ onSelect }: { onSelect: Function }) => {
+const SojuStatusList = ({ value, onSelect }: { value: SojuStatusEnum|undefined, onSelect: Function }) => {
   const [list, setList] = useState([
     {
       src: basic,
@@ -33,6 +33,10 @@ const SojuStatusList = ({ onSelect }: { onSelect: Function }) => {
     },
   ]);
 
+  useEffect(() => {
+    select(value);
+  }, [value])
+
   const getImgStyle = (isSelected: boolean) => {
     return css`
       ${imgBaseStyle}
@@ -40,23 +44,23 @@ const SojuStatusList = ({ onSelect }: { onSelect: Function }) => {
     `;
   };
 
-  const select = (selectedIndex: number) => {
+  const select = (value: SojuStatusEnum|undefined) => {
     setList(
       list.map((item, index) => 
-        index === selectedIndex ? { ...item, isSelected: true } : { ...item, isSelected: false }
+        item.value === value ? { ...item, isSelected: true } : { ...item, isSelected: false }
       )
     );
-    onSelect();
+    onSelect(value);
   };
 
   return (
     <ul css={imgListStyle}>
       {list.map((item, index) => (
-        <li>
+        <li key={index}>
           <IonImg
             src={item.src}
             css={getImgStyle(item.isSelected)}
-            onClick={select.bind(null, index)}
+            onClick={select.bind(null, item.value)}
           />
         </li>
       ))}

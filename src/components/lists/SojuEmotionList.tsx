@@ -1,15 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { IonImg } from '@ionic/react';
+import { useEffect, useState } from 'react';
 import basic from '../../assets/images/soju/basic.svg';
 import joy from '../../assets/images/soju/joy.svg';
 import anger from '../../assets/images/soju/anger.svg';
 import sadness from '../../assets/images/soju/sadness.svg';
 import crying from '../../assets/images/soju/crying.svg';
-import { useState } from 'react';
 
 
-enum SojuEmotionEnum {
+export enum SojuEmotionEnum {
   BASIC = 'BASIC',
   JOY = 'JOY',
   ANGER = 'ANGER',
@@ -17,8 +17,19 @@ enum SojuEmotionEnum {
   CRYING = 'CRYING',
 };
 
+type SojuEmotionImagesType = {
+  [key: string]: string;
+};
 
-const SojuEmotionList = ({ onSelect }: { onSelect: Function}) => {
+export const SojuEmotionImages: SojuEmotionImagesType = {
+  BASIC: basic,
+  JOY: joy,
+  ANGER: anger,
+  SADNESS: sadness,
+  CRYING: crying,
+};
+
+const SojuEmotionList = ({ value, onSelect }: { value: SojuEmotionEnum|undefined, onSelect: Function}) => {
   const [list, setList] = useState([
     {
       src: basic,
@@ -47,6 +58,10 @@ const SojuEmotionList = ({ onSelect }: { onSelect: Function}) => {
     },
   ]);
 
+  useEffect(() => {
+    select(value);
+  }, [value]);
+
   const getImgStyle = (isSelected: boolean) => {
     return css`
       ${imgBaseStyle}
@@ -54,23 +69,23 @@ const SojuEmotionList = ({ onSelect }: { onSelect: Function}) => {
     `;
   };
 
-  const select = (selectedIndex: number) => {
+  const select = (value: SojuEmotionEnum|undefined) => {
     setList(
-      list.map((item, index) => 
-        index === selectedIndex ? { ...item, isSelected: true } : { ...item, isSelected: false }
+      list.map((item) => 
+        item.value === value ? { ...item, isSelected: true } : { ...item, isSelected: false }
       )
     );
-    onSelect();
+    onSelect(value);
   };
 
   return (
     <ul css={imgListStyle}>
       {list.map((item, index) => (
-        <li>
+        <li key={index}>
           <IonImg
             src={item.src}
             css={getImgStyle(item.isSelected)}
-            onClick={select.bind(null, index)}
+            onClick={select.bind(null, item.value)}
           />
         </li>
       ))}
