@@ -64,10 +64,11 @@ const SojuStatusList = ({ value, onSelect }: { value: SojuStatusEnum|undefined, 
     <ul css={imgListStyle}>
       {list.map((item, index) => (
         <li key={index}>
-          <IonImg
+          <img
             src={item.src}
             css={getImgStyle(item.isSelected)}
             onClick={select.bind(null, item.value)}
+            alt="status"
           />
         </li>
       ))}
