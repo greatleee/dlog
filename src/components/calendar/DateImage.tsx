@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { SojuEmotionImages } from '../lists/SojuEmotionList';
+import { SojuStatusImages } from '../lists/SojuStatusList';
 import empty from '../../assets/images/soju/empty.svg';
 
 
@@ -9,7 +10,8 @@ type Props = {
 };
 
 const DateImage: React.FC<Props> = ({ value }) => {
-  const image = value ? SojuEmotionImages[value] : null;
+  // const image = value ? SojuEmotionImages[value] : null;
+  const image = value ? SojuStatusImages[value] : null;
 
   const imgStyle = css`
     ${styles.img}

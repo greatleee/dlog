@@ -42,7 +42,7 @@ const DrinkList = () => {
   return (
     <IonList>
       {list.map((item, index) => (
-        <IonItem>
+        <IonItem key={index}>
           <IonLabel>{item.type}</IonLabel>
           <IonInput type="number" value={item.amount} onIonChange={change}/>
           <IonLabel>{item.unit}</IonLabel>

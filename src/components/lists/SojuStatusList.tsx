@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { IonImg } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import basic from '../../assets/images/soju/basic.svg';
 import dizzy from '../../assets/images/soju/dizzy.svg';
@@ -15,6 +14,16 @@ export enum SojuStatusEnum {
   BLACKOUT = 'BLACKOUT',
 };
 
+type SojuStatusImagesType = {
+  [key: string]: string;
+};
+
+export const SojuStatusImages: SojuStatusImagesType = {
+  BASIC: basic,
+  DIZZY: dizzy,
+  VOMIT: vomit,
+  BLACKOUT: blackout,
+};
 
 const SojuStatusList = ({ value, onSelect }: { value: SojuStatusEnum|undefined, onSelect: Function }) => {
   const [list, setList] = useState([

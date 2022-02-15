@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { IonImg } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import basic from '../../assets/images/soju/basic.svg';
 import joy from '../../assets/images/soju/joy.svg';
