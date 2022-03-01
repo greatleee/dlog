@@ -22,6 +22,7 @@ import './theme/variables.css';
 import { RecordProvider } from './providers/RecordProvider';
 import CreateRecordModal from './components/CreateRecordModal';
 import MainTabs from './pages/MainTabs';
+import { RecordsProvider } from './providers/RecordsContext';
 
 setupIonicReact();
 
@@ -29,8 +30,10 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <RecordProvider>
-        <MainTabs />
-        <CreateRecordModal />
+        <RecordsProvider>
+          <MainTabs />
+          <CreateRecordModal />
+        </RecordsProvider>
       </RecordProvider>
     </IonReactRouter>
   </IonApp>

@@ -3,12 +3,13 @@ import { Record } from '../components/CreateRecordModal';
 
 type State = {
   showCreateModal: boolean;
-  createDate: Date;
+  createDate: Date|null;
+  isSubmitted: boolean;
   record: Record|undefined;
 };
 
 type Action = 
-  | { type: 'TOGGLE_CREATE_MODAL'; show: boolean; date: Date, record: Record|undefined };
+  | { type: 'TOGGLE_CREATE_MODAL'; show: boolean; date: Date|null, record: Record|undefined, isSubmitted: boolean };
 
 type RecordDispatch = Dispatch<Action>;
 
@@ -23,6 +24,7 @@ function reducer(state: State, action: Action): State {
         showCreateModal: action.show,
         createDate: action.date,
         record: action.record,
+        isSubmitted: action.isSubmitted,
       };
     default:
       throw new Error('Unhandled action');
@@ -32,7 +34,8 @@ function reducer(state: State, action: Action): State {
 export function RecordProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, {
     showCreateModal: false,
-    createDate: new Date(),
+    createDate: null,
+    isSubmitted: false,
     record: undefined,
   });
 

@@ -8,41 +8,43 @@ import {
   IonToolbar,
   useIonToast,
 } from '@ionic/react';
+import { format } from 'date-fns'
+import locale from 'date-fns/locale/ko'
 import { caretDownOutline } from 'ionicons/icons';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import MonthPickerBottomsheet from '../components/bottomsheets/MonthPickerBottomsheet';
 import Calendar from '../components/Calendar';
+import { useRecordsDispatch } from '../providers/RecordsContext';
 import { checkFuture } from '../utils/date';
 
 
-const Tab1: React.FC = () => {
-  const selectedDatetime = useRef(new Date().toISOString());
-  const confirmedDatetime = useRef(new Date().toISOString());
+const todayYearMonth = () => {
+  const today = new Date();
+  return new Date(today.getFullYear(), today.getMonth());
+};
 
-  const [yearMonth, setYearMonth] = useState('');
+const Tab1: React.FC = () => {
+  const selectedDate = useRef<Date>(todayYearMonth());
+  const [yearMonth, setYearMonth] = useState<Date>(todayYearMonth());
   const [showBottomsheet, setShowBottomsheet] = useState(false);
 
   const [showToast, dismissToast] = useIonToast();
 
-  useEffect(() => {
-    confirm();
-  }, []);
+  const dispatch = useRecordsDispatch();
 
   const changeYearMonth = (value: string) => {
-    selectedDatetime.current = value;
+    const date = new Date(value);
+    const yearMonthDate = new Date(date.getFullYear(), date.getMonth());
+    selectedDate.current = yearMonthDate;
   };
 
   const confirm = () => {
-    const selectedDate = new Date(selectedDatetime.current);
-
-    if (checkFuture(selectedDate)) {
+    if (checkFuture(selectedDate.current)) {
       showToast({ message: '미래의 음주는 기록할 수 없오!', color: 'danger', duration: 2000 });
     } else {
-      confirmedDatetime.current = selectedDatetime.current;
-      const confirmedDate = new Date(confirmedDatetime.current);
-      setYearMonth(`${confirmedDate.getFullYear()}년 ${confirmedDate.getMonth() + 1}월`);
+      setYearMonth(selectedDate.current);
+      dispatch({ type: 'SET_CALENDAR_DATE', date: selectedDate.current });
     }
-
     setShowBottomsheet(false);
   };
 
@@ -53,7 +55,7 @@ const Tab1: React.FC = () => {
           <IonToolbar>
             <IonTitle>
               <IonChip onClick={() => setShowBottomsheet(true)}>
-                { yearMonth }
+                { format(yearMonth, 'yyyy년 M월', { locale }) }
                 <IonIcon icon={caretDownOutline}/>
               </IonChip>
             </IonTitle>
@@ -61,13 +63,13 @@ const Tab1: React.FC = () => {
         </IonHeader>
 
         <IonContent>
-          <Calendar date={new Date(confirmedDatetime.current)}/>
+          <Calendar/>
         </IonContent>
       </IonPage>
 
       <MonthPickerBottomsheet
         isOpen={showBottomsheet}
-        datetime={confirmedDatetime.current}
+        datetime={format(yearMonth, 'yyyy-MM', { locale })}
         onChangeYearMonth={changeYearMonth}
         onDismiss={confirm}
       />

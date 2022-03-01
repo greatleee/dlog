@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import firebaseConfig from './firebase.config.json';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -20,3 +23,7 @@ serviceWorkerRegistration.unregister();
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+const firebaseApp = initializeApp(firebaseConfig.init);
+
+export const firestore = getFirestore(firebaseApp);

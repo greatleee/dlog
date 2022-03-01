@@ -20,11 +20,12 @@ import DrinkList from './lists/DrinkList';
 import SelectedImageList from './lists/SelectedImageList';
 import SojuEmotionList, { SojuEmotionEnum } from './lists/SojuEmotionList'; 
 import SojuStatusList, { SojuStatusEnum } from './lists/SojuStatusList';
-import { createRecord } from './modals/storage';
 import { useRecordDispatch, useRecordState } from '../providers/RecordProvider';
+import firestore from '../utils/firestore';
 
 
 export type Record = {
+  id: string|null,
   emotion: SojuEmotionEnum|undefined,
   status: SojuStatusEnum|undefined,
 };
@@ -33,10 +34,8 @@ const CreateRecordModal: React.FC = () => {
   const state = useRecordState();
   const dispatch = useRecordDispatch();
 
-  const [record, setRecord] = useState<Record>({
-    emotion: undefined,
-    status: undefined,
-  });
+  const [emotion, setEmotion] = useState<SojuEmotionEnum|undefined>(undefined);
+  const [status, setStatus] = useState<SojuStatusEnum|undefined>(undefined);
 
   const formatDate = (date: Date) => {
     const now = new Date();
@@ -56,34 +55,37 @@ const CreateRecordModal: React.FC = () => {
     dispatch({
       type: 'TOGGLE_CREATE_MODAL',
       show: false,
-      date: new Date(),
+      date: null,
       record: undefined,
+      isSubmitted: false,
     });
   };
 
-  const selectEmotion = async (value: SojuEmotionEnum) => {
-    await setRecord({
-      ...record,
-      emotion: value,
-    });
+  const selectEmotion = (value: SojuEmotionEnum) => {
+    setEmotion(value);
   };
 
-  const selectStatus = async (value: SojuStatusEnum) => {
-    await setRecord({
-      ...record,
-      status: value,
-    });
+  const selectStatus = (value: SojuStatusEnum) => {
+    setStatus(value);
   };
 
-  const submit = () => {
-    const yyyyMM = format(state.createDate, 'yyyyMM', { locale });
-    const d = format(state.createDate, 'd', { locale });
-    createRecord(yyyyMM, d, record);
+  const submit = async () => {
+    if (state.createDate === null) return;
+
+    await firestore.setRecord(
+      {
+        id: state.record?.id ?? null,
+        emotion,
+        status
+      },
+      state.createDate
+    );
     dispatch({
       type: 'TOGGLE_CREATE_MODAL',
       show: false,
-      date: new Date(),
+      date: null,
       record: undefined,
+      isSubmitted: true,
     });
   };
 
@@ -98,7 +100,7 @@ const CreateRecordModal: React.FC = () => {
             </IonButton>
           </IonButtons>
           <IonTitle>
-            { formatDate(state.createDate) }
+            { state.createDate ? formatDate(state.createDate) : '' }
           </IonTitle>
         </IonToolbar>
       </IonHeader>

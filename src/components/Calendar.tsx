@@ -1,51 +1,57 @@
 import { format } from 'date-fns'
 import locale from 'date-fns/locale/ko'
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useCalendar from '@veccu/react-calendar';
 import styles from './Calendar.module.css';
 import DateImage from './calendar/DateImage';
 import { Record } from './CreateRecordModal';
-import { getMonthRecords } from './modals/storage';
 import { useRecordDispatch, useRecordState } from '../providers/RecordProvider';
+import { useRecordsDispatch, useRecordsState } from '../providers/RecordsContext';
+import firestore from '../utils/firestore';
 
 
-type CalendarProps = {
-  date?: Date;
-};
-
-type Records = {
+export type Records = {
   [key: number]: Record;
 };
 
-const Calendar: React.FC<CalendarProps> = ({ date }) => {
+const Calendar: React.FC = () => {
   const { headers, body, navigation } = useCalendar();
-  const state = useRecordState();
-  const dispatch = useRecordDispatch();
-
-  const [records, setRecords] = useState<Records|null>();
-
-  useEffect(() => {
-    if (date) navigation.setDate(date);
-  }, [date]);
+  const recordState = useRecordState();
+  const recordDispatch = useRecordDispatch();
+  const recordsState = useRecordsState();
+  const recordsDispatch = useRecordsDispatch();
 
   useEffect(() => {
-    loadRecords();
-  }, [date, state.showCreateModal]);
+    initCalendar();
+    console.debug('Calendar 1');
+  }, [recordsState.date]);
+
+  useEffect(() => {
+    if (!!recordState.isSubmitted) {
+      console.debug('Calendar 2');
+      loadRecords();
+    }
+  }, [recordState.isSubmitted]);
+
+  const initCalendar = async () => {
+    await loadRecords();
+    navigation.setDate(recordsState.date);
+  };
 
   const loadRecords = async () => {
-    if (date) {
-      const yyyyMM = format(date, 'yyyyMM', { locale });
-      const records = await getMonthRecords(yyyyMM);
-      setRecords(records);
+    const records = await firestore.getMonthRecords(recordsState.date);
+    if (!!records) {
+      recordsDispatch({ type: 'SET_RECORDS', records });
     }
   };
 
   const clickDateImage = (dateValue: Date, record: Record|undefined) => {
-    dispatch({
+    recordDispatch({
       type: 'TOGGLE_CREATE_MODAL',
       show: true,
       date: dateValue,
       record: record,
+      isSubmitted: false,
     });
   };
 
@@ -70,8 +76,8 @@ const Calendar: React.FC<CalendarProps> = ({ date }) => {
                     <div className={ isCurrentDate ? styles.today : '' }>{ date }</div>
                   </div>
 
-                  <div onClick={clickDateImage.bind(null, value, records?.[date])}>
-                    <DateImage value={records?.[date]?.emotion} />
+                  <div onClick={clickDateImage.bind(null, value, recordsState.records?.[date])}>
+                    <DateImage value={recordsState.records?.[date]?.status} />
                   </div>
                 </div> }
               </td>

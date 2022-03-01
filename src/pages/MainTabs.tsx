@@ -6,32 +6,28 @@ import {
   IonTabButton,
   IonTabs
 } from '@ionic/react';
-import { format } from 'date-fns';
-import locale from 'date-fns/locale/ko';
 import { calendar, addCircle, settings } from 'ionicons/icons';
 import { Redirect, Route } from 'react-router-dom';
 import Tab1 from './Tab1';
 import Tab3 from './Tab3';
 import { useRecordDispatch } from '../providers/RecordProvider';
-import { getRecord } from '../components/modals/storage';
+import { useRecordsState } from '../providers/RecordsContext';
 
 const MainTabs: React.FC = () => {
   const dispatch = useRecordDispatch();
+  const recordsState = useRecordsState();
 
   const openCreateRecordModal = async () => {
     const today = new Date();
     today.setDate(today.getDate() - 1);
     const yesterday = today;
 
-    const yyyyMM = format(yesterday, 'yyyyMM', { locale });
-    const d = format(yesterday, 'd', { locale });
-    const record = await getRecord(yyyyMM, d)
-
     dispatch({
       type: 'TOGGLE_CREATE_MODAL',
       show: true,
       date: yesterday,
-      record: record,
+      record: recordsState.records?.[yesterday.getDate()],
+      isSubmitted: false,
     });
   }
 
