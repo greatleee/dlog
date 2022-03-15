@@ -23,11 +23,14 @@ const setRecord = async (record: Record|undefined, timestamp: Date) => {
   if (!record) return;
 
   const deviceId = await getDeviceId();
+
   const data = {
     emotion: record.emotion,
     status: record.status,
     timestamp: timestamp,
+    amounts: record.amounts,
   };
+
   if (!!record.id) {
     const ref = doc(
       firestore,

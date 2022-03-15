@@ -15,8 +15,8 @@ import {
   IonToolbar
 } from '@ionic/react';
 import { closeOutline } from 'ionicons/icons';
-import { useState } from 'react';
-import DrinkList from './lists/DrinkList';
+import { useEffect, useState } from 'react';
+import DrinkList, { Amounts } from './lists/DrinkList';
 import SelectedImageList from './lists/SelectedImageList';
 import SojuEmotionList, { SojuEmotionEnum } from './lists/SojuEmotionList'; 
 import SojuStatusList, { SojuStatusEnum } from './lists/SojuStatusList';
@@ -28,6 +28,10 @@ export type Record = {
   id: string|null,
   emotion: SojuEmotionEnum|undefined,
   status: SojuStatusEnum|undefined,
+  amounts: {
+    SOJU: number,
+    BEER: number,
+  },
 };
 
 const CreateRecordModal: React.FC = () => {
@@ -36,6 +40,20 @@ const CreateRecordModal: React.FC = () => {
 
   const [emotion, setEmotion] = useState<SojuEmotionEnum|undefined>(undefined);
   const [status, setStatus] = useState<SojuStatusEnum|undefined>(undefined);
+  const [amounts, setAmounts] = useState<Amounts>({
+    SOJU: 0,
+    BEER: 0,
+  });
+
+  useEffect(() => {
+    if (state.record)
+      setAmounts(state.record.amounts);
+    else
+      setAmounts({
+        SOJU: 0,
+        BEER: 0,
+      });
+  }, [state.record]);
 
   const formatDate = (date: Date) => {
     const now = new Date();
@@ -69,6 +87,10 @@ const CreateRecordModal: React.FC = () => {
     setStatus(value);
   };
 
+  const changeAmounts = (amounts: Amounts) => {
+    setAmounts(amounts);
+  };
+
   const submit = async () => {
     if (state.createDate === null) return;
 
@@ -76,10 +98,12 @@ const CreateRecordModal: React.FC = () => {
       {
         id: state.record?.id ?? null,
         emotion,
-        status
+        status,
+        amounts,
       },
-      state.createDate
+      state.createDate,
     );
+
     dispatch({
       type: 'TOGGLE_CREATE_MODAL',
       show: false,
@@ -118,7 +142,7 @@ const CreateRecordModal: React.FC = () => {
 
         <div>
           <h1>얼마나 마셨오?</h1>
-          <DrinkList/>
+          <DrinkList amounts={amounts} onChange={changeAmounts}/>
         </div>
 
         <div>
