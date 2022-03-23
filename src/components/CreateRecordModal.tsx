@@ -17,7 +17,6 @@ import {
 import { closeOutline } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import DrinkList, { Amounts } from './lists/DrinkList';
-import SelectedImageList from './lists/SelectedImageList';
 import SojuEmotionList, { SojuEmotionEnum } from './lists/SojuEmotionList'; 
 import SojuStatusList, { SojuStatusEnum } from './lists/SojuStatusList';
 import { useRecordDispatch, useRecordState } from '../providers/RecordProvider';
@@ -131,8 +130,8 @@ const CreateRecordModal: React.FC = () => {
 
       <IonContent css={ styles.content } fullscreen={true}>
         <div>
-          <h1>이 날 기분이 어땠오?</h1>
-          <SojuEmotionList value={state.record?.emotion} onSelect={selectEmotion}/>
+          <h1>얼마나 마셨오?</h1>
+          <DrinkList amounts={amounts} onChange={changeAmounts}/>
         </div>
 
         <div>
@@ -141,13 +140,8 @@ const CreateRecordModal: React.FC = () => {
         </div>
 
         <div>
-          <h1>얼마나 마셨오?</h1>
-          <DrinkList amounts={amounts} onChange={changeAmounts}/>
-        </div>
-
-        <div>
-          <h1>사진 있오?</h1>
-          <SelectedImageList/>
+          <h1>이 날 기분은 어땠오?</h1>
+          <SojuEmotionList value={state.record?.emotion} onSelect={selectEmotion}/>
         </div>
       </IonContent>
 
