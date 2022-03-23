@@ -34,26 +34,31 @@ const SojuStatusList = ({ value, onSelect }: { value: SojuStatusEnum|undefined, 
       src: basic,
       value: SojuStatusEnum.BASIC,
       isSelected: false,
+      description: '아무렇지\n않음',
     },
     {
       src: good,
       value: SojuStatusEnum.GOOD,
       isSelected: false,
+      description: '기분 좋게\n취함',
     },
     {
       src: dizzy,
       value: SojuStatusEnum.DIZZY,
       isSelected: false,
+      description: '헤롱헤롱',
     },
     {
       src: vomit,
       value: SojuStatusEnum.VOMIT,
       isSelected: false,
+      description: '토함',
     },
     {
       src: blackout,
       value: SojuStatusEnum.BLACKOUT,
       isSelected: false,
+      description: '기억 잃음',
     },
   ]);
 
@@ -81,12 +86,19 @@ const SojuStatusList = ({ value, onSelect }: { value: SojuStatusEnum|undefined, 
     <ul css={imgListStyle}>
       {list.map((item, index) => (
         <li key={index}>
-          <img
-            src={item.src}
-            css={getImgStyle(item.isSelected)}
-            onClick={select.bind(null, item.value)}
-            alt="status"
-          />
+          <figure css={imgWrapperStyle}>
+            <img
+              src={item.src}
+              css={getImgStyle(item.isSelected)}
+              onClick={select.bind(null, item.value)}
+              alt="status"
+            />
+          </figure>
+          <p css={imgDescriptionStyle}>
+            {item.description.split('\n').map(line => {
+              return (<span>{line}<br /></span>)
+            })}
+          </p>
         </li>
       ))}
     </ul>
@@ -96,15 +108,25 @@ const SojuStatusList = ({ value, onSelect }: { value: SojuStatusEnum|undefined, 
 export default SojuStatusList;
 
 
+const imgListStyle = css`
+  padding: 0 10px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  list-style: none;
+`;
+
 const imgBaseStyle = css`
   height: 100%;
   object-fit: cover;
 `;
 
-const imgListStyle = css`
-  height: 130px;
-  padding: 0 10px;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  list-style: none;
+const imgWrapperStyle = css`
+  width: 100%;
+  height: 140px;
+  margin: 0;
+`;
+
+const imgDescriptionStyle = css`
+  font-size: 14px;
+  text-align: center;
 `;
