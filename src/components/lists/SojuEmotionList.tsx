@@ -34,26 +34,31 @@ const SojuEmotionList = ({ value, onSelect }: { value: SojuEmotionEnum|undefined
       src: basic,
       value: SojuEmotionEnum.BASIC,
       isSelected: false,
+      description: '그냥..'
     },
     {
       src: joy,
       value: SojuEmotionEnum.JOY,
       isSelected: false,
+      description: '줗아'
     },
     {
       src: anger,
       value: SojuEmotionEnum.ANGER,
       isSelected: false,
+      description: '빡침'
     },
     {
       src: sadness,
       value: SojuEmotionEnum.SADNESS,
       isSelected: false,
+      description: '우울함'
     },
     {
       src: crying,
       value: SojuEmotionEnum.CRYING,
       isSelected: false,
+      description: '눈물 흘림'
     },
   ]);
 
@@ -81,12 +86,15 @@ const SojuEmotionList = ({ value, onSelect }: { value: SojuEmotionEnum|undefined
     <ul css={imgListStyle}>
       {list.map((item, index) => (
         <li key={index}>
+          <figure css={figureStyle}>
           <img
             src={item.src}
             css={getImgStyle(item.isSelected)}
             onClick={select.bind(null, item.value)}
             alt="emotion"
           />
+          </figure>
+          <p css={imgDescriptionStyle}>{item.description}</p>
         </li>
       ))}
     </ul>
@@ -96,15 +104,26 @@ const SojuEmotionList = ({ value, onSelect }: { value: SojuEmotionEnum|undefined
 export default SojuEmotionList;
 
 
+const imgListStyle = css`
+  height: 140px;
+  padding: 0 10px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  list-style: none;
+`;
+
 const imgBaseStyle = css`
   height: 100%;
   object-fit: cover;
 `;
 
-const imgListStyle = css`
-  height: 150px;
-  padding: 0 10px;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  list-style: none;
+const figureStyle = css`
+  width: 100%;
+  height: 140px;
+  margin: 0;
+`;
+
+const imgDescriptionStyle = css`
+  font-size: 14px;
+  text-align: center;
 `;
